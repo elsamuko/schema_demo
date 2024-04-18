@@ -31,11 +31,13 @@ data = {
 }
 a_json = """
 {
-        "foo":
-        {
-
-    "version": 1,
-    "blocks": {"block1": {"data": "abcd"}}
+    "foo": {
+        "version": 1,
+        "blocks": {
+            "block1": {
+                "data": "abcd"
+            }
+        }
     }
 }
 """
