@@ -12,3 +12,8 @@ validated json: {'foo': {'version': 1, 'blocks': {'block1': {'data': 'abcd'}}}}
 validated yaml: {'foo': {'version': 1, 'blocks': {'block1': {'data': 'abcd'}}}}
 validated  xml: {'foo': {'version': 1, 'blocks': {'block1': {'data': 'abcd'}}}}
 ```
+
+## Links
+
+* https://github.com/keleshev/schema
+* https://github.com/martinblech/xmltodict
