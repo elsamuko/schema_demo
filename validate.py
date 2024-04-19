@@ -5,6 +5,7 @@
 import json
 import yaml
 import xmltodict
+import configparser
 
 from schema import Schema, And, Regex, Use
 
@@ -60,6 +61,14 @@ a_xml = """
 </foo>
 """
 
+a_ini = """
+[foo]
+version=1
+
+[foo.blocks.block1]
+data=abcd
+"""
+
 validated = schema.validate(data)
 print(f"validated dict: {validated}")
 
@@ -74,3 +83,32 @@ print(f"validated yaml: {validated}")
 data = xmltodict.parse(a_xml, dict_constructor=dict)
 validated = schema.validate(data)
 print(f"validated  xml: {validated}")
+
+
+class IniParser(configparser.ConfigParser):
+    """ parse ini as nested dict """
+
+    def to_dict(self, s, v):
+        if "." in s:
+            k, r = s.split(".", maxsplit=1)
+            return {k: self.to_dict(r, v)}
+        else:
+            return {s: v}
+
+    def as_dict(self):
+        d = {}
+        for k, v in self._sections.items():
+            sub = self.to_dict(k, v)
+            first = list(sub.keys())[0]
+            if first in d:
+                d[first] |= sub[first]
+            else:
+                d |= sub
+        return d
+
+
+ini_parser = IniParser()
+ini_parser.read_string(a_ini)
+data = ini_parser.as_dict()
+validated = schema.validate(data)
+print(f"validated  ini: {validated}")
